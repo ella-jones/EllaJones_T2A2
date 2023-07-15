@@ -9,7 +9,7 @@ class Breed(db.Model):
 class BreedSchema(ma.Schema):
     class Meta:
         fields = ('id', 'breed_name')
-        ordered = True
+        # ordered = True (not working)
 
 breed_schema = BreedSchema()
 breeds_schema = BreedSchema(many=True)
