@@ -1,6 +1,7 @@
 from flask import Blueprint
 from init import db, bcrypt
 from models.user import User
+from models.breed import Breed
 
 db_commands = Blueprint('db', __name__)
 
@@ -31,6 +32,28 @@ def seed_db():
     ]
 
     db.session.add_all(users)
+    db.session.commit()
+
+    breeds = [
+        Breed(
+            breed_name='Labrador',
+        ),
+        Breed(
+            breed_name='Boston Terrier'
+        ),
+        Breed(
+            breed_name='Golden Retriever'
+        ),
+        Breed(
+            breed_name='German Shepard'
+        ),
+        Breed(
+            breed_name='Pug'
+        )
+    ]
+
+    db.session.add_all(breeds)
+
     db.session.commit()
 
     print("Tables Seeded")
