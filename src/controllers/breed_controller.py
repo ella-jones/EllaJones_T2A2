@@ -9,3 +9,4 @@ def get_all_breeds():
     stmt = db.select(Breed)
     breeds = db.session.scalars(stmt)
     return breeds_schema.dump(breeds)
+    

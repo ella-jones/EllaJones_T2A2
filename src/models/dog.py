@@ -21,7 +21,7 @@ class DogSchema(ma.Schema):
 
     class Meta:
         fields = ('id', 'name', 'age', 'breed', 'gender', 'description', 'is_adopted')
-        ordered = True # not working (need to fix)
+        ordered = True
 
 dog_schema = DogSchema()
 dogs_schema = DogSchema(many=True)

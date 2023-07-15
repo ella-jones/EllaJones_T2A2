@@ -13,7 +13,7 @@ class BreedSchema(ma.Schema):
     dogs = fields.List(fields.Nested('DogSchema', exclude=['breed']))
     class Meta:
         fields = ('id', 'breed_name', 'dogs')
-        # ordered = True (not working)
+        ordered = True
 
 breed_schema = BreedSchema()
 breeds_schema = BreedSchema(many=True)
