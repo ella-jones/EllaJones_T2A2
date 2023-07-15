@@ -7,7 +7,7 @@ class Breed(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     breed_name = db.Column(db.String(100))
 
-    dogs = db.relationship ('Dog', back_populated='breed', cascade='all, delete')
+    dogs = db.relationship ('Dog', back_populates='breed', cascade='all, delete')
 
 class BreedSchema(ma.Schema):
     dogs = fields.List(fields.Nested('DogSchema', exclude=['breed']))

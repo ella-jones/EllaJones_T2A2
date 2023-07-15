@@ -4,6 +4,7 @@ from init import db, ma, bcrypt, jwt
 from controllers.cli_controller import db_commands
 from controllers.auth_controller import auth_bp
 from controllers.breed_controller import breeds_bp
+from controllers.dog_controller import dogs_bp
 
 def create_app():
     app = Flask(__name__)
@@ -19,5 +20,6 @@ def create_app():
     app.register_blueprint(db_commands)
     app.register_blueprint(auth_bp)
     app.register_blueprint(breeds_bp)
+    app.register_blueprint(dogs_bp)
 
     return app

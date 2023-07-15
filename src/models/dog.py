@@ -6,12 +6,12 @@ class Dog(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
-    age = db.Column(db.Integer)
+    age = db.Column(db.String)
 
     breed_id = db.Column(db.Integer, db.ForeignKey('breeds.id'), nullable = False)
     
     gender = db.Column(db.String)
-    description = db.Column(db.text)
+    description = db.Column(db.Text)
     is_adopted = db.Column(db.Boolean, default=False)
 
     breed = db.relationship('Breed', back_populates='dogs')
@@ -21,7 +21,7 @@ class DogSchema(ma.Schema):
 
     class Meta:
         fields = ('id', 'name', 'age', 'breed', 'gender', 'description', 'is_adopted')
-        ordered = True
+        ordered = True # not working (need to fix)
 
 dog_schema = DogSchema()
-dog_schema = DogSchema(many=True)
+dogs_schema = DogSchema(many=True)
