@@ -20,6 +20,7 @@ def get_one_dog(id):
     else: return {'error': f'Dog not found with id {id}'}, 404
 
 @dogs_bp.route('/', methods=['POST'])
+@jwt_required()
 def create_dog():
     body_data = request.get_json()
     # create a new Dog model instance
