@@ -3,6 +3,8 @@ from init import db, bcrypt
 from models.user import User
 from models.breed import Breed
 from models.dog import Dog
+from models.adoption import Adoption
+from datetime import date
 
 db_commands = Blueprint('db', __name__)
 
@@ -87,6 +89,24 @@ def seed_db():
     ]
 
     db.session.add_all(dogs)
+
+    adoptions = [
+        Adoption(
+            dog=dogs[0],
+            adopter=users[1],
+            adoption_date=date.today(),
+            notes="Adoption 1 notes"
+        ),
+        Adoption(
+            dog=dogs[1],
+            adopter=users[1],
+            adoption_date=date.today(),
+            notes="Adoption 2 notes"
+        )
+    ]
+
+    db.session.add_all(adoptions)
+
     db.session.commit()
 
     print("Tables Seeded")
