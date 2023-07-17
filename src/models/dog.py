@@ -7,9 +7,7 @@ class Dog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
     age = db.Column(db.String)
-
     breed_id = db.Column(db.Integer, db.ForeignKey('breeds.id'), nullable = False)
-    
     gender = db.Column(db.String)
     description = db.Column(db.Text)
     is_adopted = db.Column(db.Boolean, default=False)

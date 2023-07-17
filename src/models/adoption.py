@@ -1,5 +1,6 @@
 from init import db, ma
 from marshmallow import fields
+from datetime import date
 
 class Adoption(db.Model):
     __tablename__ = 'adoptions'
@@ -7,7 +8,7 @@ class Adoption(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     dog_id = db.Column(db.Integer, db.ForeignKey('dogs.id'), nullable=False)
     adopter_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    adoption_date = db.Column(db.Date) # date created
+    adoption_date = db.Column(db.Date, default=date.today()) # date created
     notes = db.Column(db.Text)
 
     adopter = db.relationship('User', back_populates='adoptions')
