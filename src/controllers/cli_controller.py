@@ -69,8 +69,7 @@ def seed_db():
             age='5',
             breed=breeds[1],
             gender='Male',
-            description='Dog 2 desc',
-            is_adopted=True
+            description='Dog 2 desc'
         ),
         Dog (
             name='Dog 3',

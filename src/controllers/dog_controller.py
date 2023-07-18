@@ -59,7 +59,6 @@ def update_one_dog(id):
         dog.breed_id = body_data.get('breed_id') or dog.breed_id
         dog.gender = body_data.get('gender') or dog.gender
         dog.description = body_data.get('description') or dog.description
-        dog.is_adopted = body_data.get('is_adopted') or dog.is_adopted
         db.session.commit()
         return dog_schema.dump(dog)
     else:
