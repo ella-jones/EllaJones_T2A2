@@ -10,13 +10,14 @@ class Dog(db.Model):
     breed_id = db.Column(db.Integer, db.ForeignKey('breeds.id'), nullable = False)
     gender = db.Column(db.String)
     description = db.Column(db.Text)
+    # adoption_id =db.Column(db.Integer, db.ForeignKey('adoptions.id'), nullable = True)
 
     breed = db.relationship('Breed', back_populates='dogs')
     adoption = db.relationship('Adoption', back_populates='dog')
 
 class DogSchema(ma.Schema):
     breed = fields.Nested('BreedSchema', only=['breed_name'])
-    adoption = fields.Nested('AdoptionSchema', exclude=['id', 'dog'])
+    adoption = fields.Nested('AdoptionSchema', exclude=['dog'])
 
     class Meta:
         fields = ('id', 'name', 'age', 'breed', 'gender', 'description', 'adoption')
