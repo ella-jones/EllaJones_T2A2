@@ -1,7 +1,8 @@
 from flask import Blueprint, request
 from init import db
 from models.dog import Dog, dog_schema, dogs_schema
-from flask_jwt_extended import jwt_required
+from models.user import User
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from marshmallow import INCLUDE
 
 dogs_bp = Blueprint('dogs', __name__, url_prefix='/dogs')
@@ -39,6 +40,9 @@ def create_dog():
 @dogs_bp.route('/<int:id>', methods=['DELETE'])
 @jwt_required()
 def delete_one_dog(id):
+    is_employee = authorise_as_employee()
+    if not is_employee:
+        return {'error': 'Not authorised to delete dogs'}, 403
     stmt = db.select(Dog).filter_by(id=id)
     dog = db.session.scalar(stmt)
     if dog:
@@ -65,3 +69,10 @@ def update_one_dog(id):
     else:
         return {'error': f'Dog not found with id {id}'}, 404
 
+def authorise_as_employee():
+    user_id = get_jwt_identity()
+    stmt = db.select(User).filter_by(id=user_id)
+    user = db.session.scalar(stmt)
+    return user.is_employee
+    
+    
