@@ -22,7 +22,7 @@ def get_one_breed(id):
 @breeds_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_breed():
-    body_data = request.get_json()
+    body_data = breed_schema.load(request.get_json())
     # create a new Breed model instance
     breed = Breed(
         breed_name=body_data.get('breed_name'),   
@@ -46,7 +46,7 @@ def delete_one_breed(id):
 @breeds_bp.route('/<int:id>', methods=['PUT', 'PATCH'])
 @jwt_required()
 def update_one_breed(id):
-    body_data = request.get_json()
+    body_data = breed_schema.load(request.get_json(), partial=True)
     stmt = db.select(Breed).filter_by(id=id)
     breed = db.session.scalar(stmt)
     if breed:

@@ -1,5 +1,8 @@
 from init import db, ma
 from marshmallow import fields
+from marshmallow.validate import Length, And, Regexp, OneOf
+
+VALID_GENDERS = ('Female', 'Male', 'Other')
 
 class Dog(db.Model):
     __tablename__ = "dogs"
@@ -17,6 +20,8 @@ class Dog(db.Model):
 class DogSchema(ma.Schema):
     breed = fields.Nested('BreedSchema', only=['breed_name'])
     adoption = fields.Nested('AdoptionSchema', exclude=['dog'])
+
+    gender = fields.String(validate=OneOf(VALID_GENDERS))
 
     class Meta:
         fields = ('id', 'name', 'age', 'breed', 'gender', 'description', 'adoption')

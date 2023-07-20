@@ -2,6 +2,7 @@ from flask import Blueprint, request
 from init import db
 from models.dog import Dog, dog_schema, dogs_schema
 from flask_jwt_extended import jwt_required
+from marshmallow import INCLUDE
 
 dogs_bp = Blueprint('dogs', __name__, url_prefix='/dogs')
 
@@ -22,8 +23,8 @@ def get_one_dog(id):
 @dogs_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_dog():
-    body_data = request.get_json()
-    # create a new Dog model instance
+    body_data = dog_schema.load(request.get_json(), unknown=INCLUDE)
+    
     dog = Dog(
         name=body_data.get('name'),
         age=body_data.get('age'),
@@ -50,7 +51,7 @@ def delete_one_dog(id):
 @dogs_bp.route('/<int:id>', methods=['PUT', 'PATCH'])
 @jwt_required()
 def update_one_dog(id):
-    body_data = request.get_json()
+    body_data = dog_schema.load(request.get_json(), unknown=INCLUDE, partial=True)
     stmt = db.select(Dog).filter_by(id=id)
     dog = db.session.scalar(stmt)
     if dog:

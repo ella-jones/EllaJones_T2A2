@@ -1,6 +1,7 @@
 from init import db, ma
-from marshmallow import fields
+from marshmallow import fields, validates
 from datetime import date
+from marshmallow.exceptions import ValidationError
 
 class Adoption(db.Model):
     __tablename__ = 'adoptions'
@@ -17,6 +18,14 @@ class Adoption(db.Model):
 class AdoptionSchema(ma.Schema):
     adopter = fields.Nested('UserSchema', only=['full_name', 'email'])
     dog = fields.Nested('DogSchema', only=['name'])
+
+    # @validates('dog_id')
+    # def validate_dog_id(self, value):
+    #     if value == dog_id[id]:
+    #         stmt = db.select(db.func.count()).select_from(Adoption).filter_by(dog_id=id)
+    #         count=db.session.scalar(stmt)
+    #         if count > 0 :
+    #             raise ValidationError(f'An adoption record for dog with id {id} already exists')
 
     class Meta:
         fields = ('id', 'dog', 'adopter', 'adoption_date', 'notes')
