@@ -25,9 +25,18 @@ class AdoptionSchema(ma.Schema):
             count=db.session.scalar(stmt)
             if count > 0 :
                 raise ValidationError(f'An adoption record for that dog already exists')
+            if count < 1 :
+                raise ValidationError(f'No dog with that id exists')
+
+    @validates('adopter_id')
+    def validate_adopter_id(self, value):
+            stmt = db.select(db.func.count()).select_from(Adoption).filter_by(adopter_id=value)
+            count=db.session.scalar(stmt)
+            if count < 1 :
+                raise ValidationError(f'No user with that id exists')
 
     class Meta:
-        fields = ('id', 'dog', 'adopter', 'adoption_date', 'notes', 'dog_id')
+        fields = ('id', 'dog', 'adopter', 'adoption_date', 'notes', 'dog_id', 'adopter_id')
         ordered = True
         include_fk = True
 

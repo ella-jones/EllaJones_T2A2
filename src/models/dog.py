@@ -1,6 +1,7 @@
 from init import db, ma
-from marshmallow import fields
-from marshmallow.validate import Length, And, Regexp, OneOf
+from marshmallow import fields, validates
+from marshmallow.validate import OneOf
+from marshmallow.exceptions import ValidationError
 
 VALID_GENDERS = ('Female', 'Male', 'Other')
 
@@ -23,9 +24,17 @@ class DogSchema(ma.Schema):
 
     gender = fields.String(validate=OneOf(VALID_GENDERS))
 
+    @validates('breed_id')
+    def validate_breed_id(self, value):
+            stmt = db.select(db.func.count()).select_from(Dog).filter_by(breed_id=value)
+            count=db.session.scalar(stmt)
+            if count < 1 :
+                raise ValidationError(f'No breed with that id exists')
+
     class Meta:
-        fields = ('id', 'name', 'age', 'breed', 'gender', 'description', 'adoption')
+        fields = ('id', 'name', 'age', 'breed', 'gender', 'description', 'adoption', 'breed_id')
         ordered = True
+        include_fk = True
 
 dog_schema = DogSchema()
 dogs_schema = DogSchema(many=True)

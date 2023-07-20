@@ -50,7 +50,7 @@ def delete_one_adoption(id):
 @adoptions_bp.route('/<int:id>', methods=['PUT', 'PATCH'])
 @jwt_required()
 def update_one_adoption(id):
-    body_data = request.get_json()
+    body_data = adoption_schema.load(request.get_json(), unknown=INCLUDE, partial=True)
     stmt = db.select(Adoption).filter_by(id=id)
     adoption = db.session.scalar(stmt)
     if adoption:
