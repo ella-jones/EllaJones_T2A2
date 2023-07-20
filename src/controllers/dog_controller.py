@@ -4,8 +4,21 @@ from models.dog import Dog, dog_schema, dogs_schema
 from models.user import User
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from marshmallow import INCLUDE
+import functools
 
 dogs_bp = Blueprint('dogs', __name__, url_prefix='/dogs')
+
+def authorise_as_employee(fn):
+    @functools.wraps(fn)
+    def wrapper(*args, **kwargs):
+        user_id = get_jwt_identity()
+        stmt = db.select(User).filter_by(id=user_id)
+        user = db.session.scalar(stmt)
+        if user.is_employee:
+            return fn(*args, **kwargs)
+        else: 
+            return {'error': 'Not authorised to perform action'}, 403
+    return wrapper
 
 @dogs_bp.route('/')
 def get_all_dogs():
@@ -23,9 +36,9 @@ def get_one_dog(id):
 
 @dogs_bp.route('/', methods=['POST'])
 @jwt_required()
+@authorise_as_employee
 def create_dog():
     body_data = dog_schema.load(request.get_json(), unknown=INCLUDE)
-    
     dog = Dog(
         name=body_data.get('name'),
         age=body_data.get('age'),
@@ -39,10 +52,8 @@ def create_dog():
 
 @dogs_bp.route('/<int:id>', methods=['DELETE'])
 @jwt_required()
+@authorise_as_employee
 def delete_one_dog(id):
-    is_employee = authorise_as_employee()
-    if not is_employee:
-        return {'error': 'Not authorised to delete dogs'}, 403
     stmt = db.select(Dog).filter_by(id=id)
     dog = db.session.scalar(stmt)
     if dog:
@@ -54,6 +65,7 @@ def delete_one_dog(id):
 
 @dogs_bp.route('/<int:id>', methods=['PUT', 'PATCH'])
 @jwt_required()
+@authorise_as_employee
 def update_one_dog(id):
     body_data = dog_schema.load(request.get_json(), unknown=INCLUDE, partial=True)
     stmt = db.select(Dog).filter_by(id=id)
@@ -68,11 +80,3 @@ def update_one_dog(id):
         return dog_schema.dump(dog)
     else:
         return {'error': f'Dog not found with id {id}'}, 404
-
-def authorise_as_employee():
-    user_id = get_jwt_identity()
-    stmt = db.select(User).filter_by(id=user_id)
-    user = db.session.scalar(stmt)
-    return user.is_employee
-    
-    
