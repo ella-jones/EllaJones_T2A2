@@ -24,10 +24,10 @@ class AdoptionSchema(ma.Schema):
             stmt = db.select(db.func.count()).select_from(Adoption).filter_by(dog_id=value)
             count=db.session.scalar(stmt)
             if count > 0 :
-                raise ValidationError(f'An adoption record for dog with id {id} already exists')
+                raise ValidationError(f'An adoption record for that dog already exists')
 
     class Meta:
-        fields = ('id', 'dog', 'adopter', 'adoption_date', 'notes')
+        fields = ('id', 'dog', 'adopter', 'adoption_date', 'notes', 'dog_id')
         ordered = True
         include_fk = True
 

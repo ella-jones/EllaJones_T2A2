@@ -22,8 +22,8 @@ def create_app():
         return {'error': err.messages}, 400
     
     @app.errorhandler(IntegrityError)
-    def integrity_error(err):
-        return {'error': err.messages}, 400
+    def integrity_error(err): # will need to change this to err.messages and handle all errors in the controllers with individual messages.
+        return {'error': str(err)}, 400
     
     @app.errorhandler(400)
     def bad_request(err):
@@ -32,7 +32,7 @@ def create_app():
     @app.errorhandler(404)
     def not_found(err):
         return {'error': str(err)}, 404
-
+    
     db.init_app(app)
     ma.init_app(app)
     bcrypt.init_app(app)
