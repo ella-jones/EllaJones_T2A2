@@ -2,6 +2,7 @@ from flask import Blueprint, request
 from init import db
 from models.adoption import Adoption, adoptions_schema, adoption_schema
 from flask_jwt_extended import jwt_required
+from marshmallow import INCLUDE
 
 adoptions_bp = Blueprint('adoptions', __name__, url_prefix='/adoptions')
 
@@ -22,7 +23,7 @@ def get_one_adoption(id):
 @adoptions_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_adoption():
-    body_data = request.get_json()
+    body_data = adoption_schema.load(request.get_json(), unknown=INCLUDE)
     # create a new Adoption model instance
     adoption = Adoption(
         dog_id=body_data.get('dog_id'),

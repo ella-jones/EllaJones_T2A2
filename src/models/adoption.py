@@ -19,17 +19,17 @@ class AdoptionSchema(ma.Schema):
     adopter = fields.Nested('UserSchema', only=['full_name', 'email'])
     dog = fields.Nested('DogSchema', only=['name'])
 
-    # @validates('dog_id')
-    # def validate_dog_id(self, value):
-    #     if value == dog_id[id]:
-    #         stmt = db.select(db.func.count()).select_from(Adoption).filter_by(dog_id=id)
-    #         count=db.session.scalar(stmt)
-    #         if count > 0 :
-    #             raise ValidationError(f'An adoption record for dog with id {id} already exists')
+    @validates('dog_id')
+    def validate_dog_id(self, value):
+            stmt = db.select(db.func.count()).select_from(Adoption).filter_by(dog_id=value)
+            count=db.session.scalar(stmt)
+            if count > 0 :
+                raise ValidationError(f'An adoption record for dog with id {id} already exists')
 
     class Meta:
         fields = ('id', 'dog', 'adopter', 'adoption_date', 'notes')
         ordered = True
+        include_fk = True
 
 adoption_schema = AdoptionSchema()
 adoptions_schema = AdoptionSchema(many=True)
