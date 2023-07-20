@@ -39,7 +39,7 @@ def delete_one_breed(id):
     if breed:
         db.session.delete(breed)
         db.session.commit()
-        return {'message': f'Breed {breed.breed_name} deleted successfully'}
+        return {'message': f'Breed: {breed.breed_name} deleted successfully'}
     else:
         return {'error': f'Breed not found with id {id}'}, 404
 

@@ -25,8 +25,8 @@ class AdoptionSchema(ma.Schema):
             count=db.session.scalar(stmt)
             if count > 0 :
                 raise ValidationError(f'An adoption record for that dog already exists')
-            if count < 1 :
-                raise ValidationError(f'No dog with that id exists')
+            # if count < 1 :
+            #     raise ValidationError(f'No dog with that id exists')
 
     @validates('adopter_id')
     def validate_adopter_id(self, value):

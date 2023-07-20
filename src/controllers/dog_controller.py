@@ -59,7 +59,7 @@ def delete_one_dog(id):
     if dog:
         db.session.delete(dog)
         db.session.commit()
-        return {'message': f'Dog {dog.name} deleted successfully'}
+        return {'message': f'Dog: {dog.name} deleted successfully'}
     else:
         return {'error': f'Dog not found with id {id}'}, 404
 

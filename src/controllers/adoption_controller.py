@@ -3,6 +3,7 @@ from init import db
 from models.adoption import Adoption, adoptions_schema, adoption_schema
 from flask_jwt_extended import jwt_required
 from marshmallow import INCLUDE
+from controllers.dog_controller import authorise_as_employee
 
 adoptions_bp = Blueprint('adoptions', __name__, url_prefix='/adoptions')
 
@@ -22,6 +23,7 @@ def get_one_adoption(id):
 
 @adoptions_bp.route('/', methods=['POST'])
 @jwt_required()
+@authorise_as_employee
 def create_adoption():
     body_data = adoption_schema.load(request.get_json(), unknown=INCLUDE)
     # create a new Adoption model instance
@@ -37,6 +39,7 @@ def create_adoption():
 
 @adoptions_bp.route('/<int:id>', methods=['DELETE'])
 @jwt_required()
+@authorise_as_employee
 def delete_one_adoption(id):
     stmt = db.select(Adoption).filter_by(id=id)
     adoption = db.session.scalar(stmt)
@@ -49,6 +52,7 @@ def delete_one_adoption(id):
     
 @adoptions_bp.route('/<int:id>', methods=['PUT', 'PATCH'])
 @jwt_required()
+@authorise_as_employee
 def update_one_adoption(id):
     body_data = adoption_schema.load(request.get_json(), unknown=INCLUDE, partial=True)
     stmt = db.select(Adoption).filter_by(id=id)
