@@ -30,7 +30,6 @@ def create_dog():
         breed_id=body_data.get('breed_id'),
         gender=body_data.get('gender'),
         description=body_data.get('description')
-        # adoption_id=body_data.get('adoption_id')    
     )
     db.session.add(dog)
     db.session.commit()
@@ -60,7 +59,6 @@ def update_one_dog(id):
         dog.breed_id = body_data.get('breed_id') or dog.breed_id
         dog.gender = body_data.get('gender') or dog.gender
         dog.description = body_data.get('description') or dog.description
-        # dog.adoption_id = body_data.get('adoption_id') or dog.adoption_id
         db.session.commit()
         return dog_schema.dump(dog)
     else:
