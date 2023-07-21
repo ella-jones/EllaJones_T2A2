@@ -3,8 +3,7 @@ from init import db
 from models.breed import Breed, breeds_schema, breed_schema
 from flask_jwt_extended import jwt_required
 from controllers.dog_controller import authorise_as_employee
-from psycopg2.errors import NotNullViolation
-# from main import NotNullViolation
+from sqlalchemy.exc import IntegrityError
 
 breeds_bp = Blueprint('breeds', __name__, url_prefix='/breeds')
 
@@ -48,7 +47,7 @@ def delete_one_breed(id):
             return {'message': f'Breed: {breed.breed_name} deleted successfully'}
         else:
             return {'error': f'Breed not found with id {id}'}, 404
-    except NotNullViolation as err:
+    except IntegrityError as err:
         return {'error': f'Cannot delete breed with id {id} as it has dogs associated.'}
 
 @breeds_bp.route('/<int:id>', methods=['PUT', 'PATCH'])

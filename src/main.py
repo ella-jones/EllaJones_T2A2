@@ -20,26 +20,27 @@ def create_app():
 
     @app.errorhandler(ValidationError)
     def validation_error(err):
+        print("validation_error error")
         return {'error': err.messages}, 400
     
     @app.errorhandler(IntegrityError)
     def integrity_error(err): 
+        print("integrity_error error")
         return {'error': str(err)}, 400
     
     @app.errorhandler(DataError)
     def data_error(err): 
+        print("data_error error")
         return {'error': str(err)}, 400
-    
-    # @app.errorhandler(NotNullViolation)
-    # def not_null_violation(err): 
-    #     return {'error': err.messages}, 400
     
     @app.errorhandler(400)
     def bad_request(err):
+        print("bad_request error")
         return {'error': str(err)}, 400
     
     @app.errorhandler(404)
     def not_found(err):
+        print("not_found error")
         return {'error': str(err)}, 404
     
     db.init_app(app)
