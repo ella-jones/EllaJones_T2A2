@@ -7,7 +7,8 @@ from controllers.breed_controller import breeds_bp
 from controllers.dog_controller import dogs_bp
 from controllers.adoption_controller import adoptions_bp
 from marshmallow.exceptions import ValidationError
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError, DataError
+from psycopg2.errors import NotNullViolation
 
 def create_app():
     app = Flask(__name__)
@@ -22,8 +23,16 @@ def create_app():
         return {'error': err.messages}, 400
     
     @app.errorhandler(IntegrityError)
-    def integrity_error(err): # will need to change this to err.messages and handle all errors in the controllers with individual messages.
+    def integrity_error(err): 
         return {'error': str(err)}, 400
+    
+    @app.errorhandler(DataError)
+    def data_error(err): 
+        return {'error': str(err)}, 400
+    
+    # @app.errorhandler(NotNullViolation)
+    # def not_null_violation(err): 
+    #     return {'error': err.messages}, 400
     
     @app.errorhandler(400)
     def bad_request(err):

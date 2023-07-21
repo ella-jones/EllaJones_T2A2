@@ -3,6 +3,8 @@ from init import db
 from models.breed import Breed, breeds_schema, breed_schema
 from flask_jwt_extended import jwt_required
 from controllers.dog_controller import authorise_as_employee
+from psycopg2.errors import NotNullViolation
+# from main import NotNullViolation
 
 breeds_bp = Blueprint('breeds', __name__, url_prefix='/breeds')
 
@@ -25,7 +27,7 @@ def get_one_breed(id):
 @authorise_as_employee
 def create_breed():
     body_data = breed_schema.load(request.get_json())
-    # create a new Breed model instance
+    # creates a new Breed model instance
     breed = Breed(
         breed_name=body_data.get('breed_name'),   
     )
@@ -33,18 +35,21 @@ def create_breed():
     db.session.commit()
     return breed_schema.dump(breed), 201
 
-# @breeds_bp.route('/<int:id>', methods=['DELETE'])
-# @jwt_required()
-# @authorise_as_employee
-# def delete_one_breed(id):
-#     stmt = db.select(Breed).filter_by(id=id)
-#     breed = db.session.scalar(stmt)
-#     if breed:
-#         db.session.delete(breed)
-#         db.session.commit()
-#         return {'message': f'Breed: {breed.breed_name} deleted successfully'}
-#     else:
-#         return {'error': f'Breed not found with id {id}'}, 404
+@breeds_bp.route('/<int:id>', methods=['DELETE'])
+@jwt_required()
+@authorise_as_employee
+def delete_one_breed(id):
+    try:
+        stmt = db.select(Breed).filter_by(id=id)
+        breed = db.session.scalar(stmt)
+        if breed:
+            db.session.delete(breed)
+            db.session.commit()
+            return {'message': f'Breed: {breed.breed_name} deleted successfully'}
+        else:
+            return {'error': f'Breed not found with id {id}'}, 404
+    except NotNullViolation as err:
+        return {'error': f'Cannot delete breed with id {id} as it has dogs associated.'}
 
 @breeds_bp.route('/<int:id>', methods=['PUT', 'PATCH'])
 @jwt_required()
