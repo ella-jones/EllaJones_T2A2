@@ -1,24 +1,11 @@
 from flask import Blueprint, request
 from init import db
 from models.dog import Dog, dog_schema, dogs_schema
-from models.user import User
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required
 from marshmallow import INCLUDE
-import functools
+from decorators.authorisation import authorise_as_employee
 
 dogs_bp = Blueprint('dogs', __name__, url_prefix='/dogs')
-
-def authorise_as_employee(fn):
-    @functools.wraps(fn)
-    def wrapper(*args, **kwargs):
-        user_id = get_jwt_identity()
-        stmt = db.select(User).filter_by(id=user_id)
-        user = db.session.scalar(stmt)
-        if user.is_employee:
-            return fn(*args, **kwargs)
-        else: 
-            return {'error': 'Not authorised to perform action'}, 403
-    return wrapper
 
 @dogs_bp.route('/')
 def get_all_dogs():

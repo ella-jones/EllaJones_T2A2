@@ -2,7 +2,7 @@ from flask import Blueprint, request
 from init import db
 from models.breed import Breed, breeds_schema, breed_schema
 from flask_jwt_extended import jwt_required
-from controllers.dog_controller import authorise_as_employee
+from decorators.authorisation import authorise_as_employee
 from sqlalchemy.exc import IntegrityError
 
 breeds_bp = Blueprint('breeds', __name__, url_prefix='/breeds')

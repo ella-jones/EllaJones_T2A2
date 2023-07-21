@@ -3,7 +3,7 @@ from init import db
 from models.adoption import Adoption, adoptions_schema, adoption_schema
 from flask_jwt_extended import jwt_required
 from marshmallow import INCLUDE
-from controllers.dog_controller import authorise_as_employee
+from decorators.authorisation import authorise_as_employee
 
 adoptions_bp = Blueprint('adoptions', __name__, url_prefix='/adoptions')
 
