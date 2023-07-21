@@ -4,6 +4,9 @@ from models.dog import Dog, dog_schema, dogs_schema
 from flask_jwt_extended import jwt_required
 from marshmallow import INCLUDE
 from decorators.authorisation import authorise_as_employee
+from sqlalchemy.exc import IntegrityError
+from psycopg2 import errorcodes
+
 
 dogs_bp = Blueprint('dogs', __name__, url_prefix='/dogs')
 
@@ -25,17 +28,21 @@ def get_one_dog(id):
 @jwt_required()
 @authorise_as_employee
 def create_dog():
-    body_data = dog_schema.load(request.get_json(), unknown=INCLUDE)
-    dog = Dog(
-        name=body_data.get('name'),
-        age=body_data.get('age'),
-        breed_id=body_data.get('breed_id'),
-        gender=body_data.get('gender'),
-        description=body_data.get('description')
-    )
-    db.session.add(dog)
-    db.session.commit()
-    return dog_schema.dump(dog), 201
+    try:
+        body_data = dog_schema.load(request.get_json(), unknown=INCLUDE)
+        dog = Dog(
+            name=body_data.get('name'),
+            age=body_data.get('age'),
+            breed_id=body_data.get('breed_id'),
+            gender=body_data.get('gender'),
+            description=body_data.get('description')
+        )
+        db.session.add(dog)
+        db.session.commit()
+        return dog_schema.dump(dog), 201
+    except IntegrityError as err:
+        if err.orig.pgcode == errorcodes.NOT_NULL_VIOLATION:
+            return {'error': f'The {err.orig.diag.column_name} is required'}, 409
 
 @dogs_bp.route('/<int:id>', methods=['DELETE'])
 @jwt_required()

@@ -6,7 +6,7 @@ class Breed(db.Model):
     __tablename__ = "breeds"
 
     id = db.Column(db.Integer, primary_key=True)
-    breed_name = db.Column(db.String(100))
+    breed_name = db.Column(db.String(100), nullable=False)
 
     dogs = db.relationship ('Dog', back_populates='breed', cascade='all, delete')
 

@@ -9,7 +9,7 @@ class Dog(db.Model):
     __tablename__ = "dogs"
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
+    name = db.Column(db.String(100), nullable = False)
     age = db.Column(db.String)
     breed_id = db.Column(db.Integer, db.ForeignKey('breeds.id'), nullable = False)
     gender = db.Column(db.String)
