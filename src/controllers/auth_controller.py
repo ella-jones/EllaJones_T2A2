@@ -13,9 +13,9 @@ def auth_register():
     try:
         # expected input:
         # {
-        #   "full_name" = "Jane Doe"
-        #   "email" = "user@email.com"
-        #   "password" = "user1pw"
+        #   "full_name": "Jane Doe",
+        #   "email": "user@email.com",
+        #   "password": "user1pw"
         # }
         body_data = request.get_json() # Checks for body data inputted by user
         user = User()
@@ -43,8 +43,8 @@ def auth_login():
     body_data = request.get_json() # Checks for body data inputted by user
     # expected input:
         # {
-        #   "email" = "user@email.com"
-        #   "password" = "user1pw"
+        #   "email": "user@email.com",
+        #   "password": "user1pw"
         # }
 
     # Find the user by email address
