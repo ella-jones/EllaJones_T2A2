@@ -502,6 +502,7 @@ Route "/< int:id >"
         ]
     }
 }
+```
 * Any other errors will be caught by a general error handler which will display the error message.
 
 ### Breeds (URL prefix = "/breeds")
