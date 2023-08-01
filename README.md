@@ -999,7 +999,7 @@ Route "/< int:id >"
 ```
 * Any other errors will be caught by a general error handler which will display the error message.
 
-R6 -  An ERD for your app.**
+### **R6 -  An ERD for your app.**
 ![ERD for Dog Adoption API](./docs/Dog_Adoption.png)
 
 *Futher explanation of this ERD can be found here: [R9 - Database Relations](/README.md#r9---discuss-the-database-relations-to-be-implemented-in-your-application)*
