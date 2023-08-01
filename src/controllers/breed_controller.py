@@ -4,7 +4,6 @@ from models.breed import Breed, breeds_schema, breed_schema
 from flask_jwt_extended import jwt_required
 from decorators.authorisation import authorise_as_employee
 from sqlalchemy.exc import IntegrityError
-from psycopg2 import errorcodes
 
 breeds_bp = Blueprint('breeds', __name__, url_prefix='/breeds')
 

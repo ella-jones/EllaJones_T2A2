@@ -8,7 +8,6 @@ from controllers.dog_controller import dogs_bp
 from controllers.adoption_controller import adoptions_bp
 from marshmallow.exceptions import ValidationError
 from sqlalchemy.exc import IntegrityError, DataError
-from psycopg2.errors import NotNullViolation
 
 def create_app():
     app = Flask(__name__)
