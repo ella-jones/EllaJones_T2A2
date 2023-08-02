@@ -29,7 +29,7 @@ Clone or download the repository from Github.
 
 GitHub link: https://github.com/ella-jones/EllaJones_T2A2.git
 
-Ensure that Python 3 and PostgreSQL are installed. 
+Ensure that Python3 and PostgreSQL are installed. 
 
 Open the command line/terminal and run the following PostgreSQL command:
 >psql
@@ -50,6 +50,7 @@ Open another command line/terminal and run the following commands:
 
 Cd into the src folder inside the project folder and create/activate the virtual environment:
 > python3 -m venv .venv
+
 > source .venv/bin/activate
 
 Install dependencies: 
@@ -59,7 +60,8 @@ In the /src folder, rename the .envexample file to .env and set the database con
 
 Create and seed the database:
 > flask db create
-“flask db seed”
+
+> flask db seed
 
 Run the application: 
 > flask run
